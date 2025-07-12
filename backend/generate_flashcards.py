@@ -1,36 +1,31 @@
 # Load GPT-Neo model (EleutherAI/gpt-neo-2.7B)
 
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM, T5ForConditionalGeneration, T5Tokenizer
 import re
-model_name = "EleutherAI/gpt-neo-1.3B"
+model_name = "t5-base"
 
-print("Loading GPT-Neo model...")  # <-- DEBUG
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
-generator = pipeline("text-generation", model=model, tokenizer=tokenizer, device=-1) # -1 = CPU, change to 0 if using GPU (not likely on M1 Mac)
+
+tokenizer = T5Tokenizer.from_pretrained(model_name)
+model = T5ForConditionalGeneration.from_pretrained(model_name)
+print("Loading T5 model...")  # <-- DEBUG
+#tokenizer = AutoTokenizer.from_pretrained(model_name)
+#model = AutoModelForCausalLM.from_pretrained(model_name)
+generator = pipeline("text2text-generation", model=model_name, device=-1) # -1 = CPU, change to 0 if using GPU (not likely on M1 Mac)
 print("Model loaded!")  # <-- DEBUG
 
 def generate_flashcards(text):
     print("Starting flashcard generation...")  # <-- DEBUG
-    prompt = f"""
-    Create 5-10 simple flashcards from this lecture text.
-    Format each flashcard like this exactly:
+    prompt = f"summarize: Create 5-10 simple flashcards from this lecture text.\n\n{text}"
 
-    Q: A question
-    A: The answer
-
-    Lecture Notes:
-    {text}
-    """
 
     print("Prompt length:", len(prompt))  # <-- Debug prompt size
-    import time
-    start = time.time()
+    #import time
+    #start = time.time()
     print(">>> Before generation")
-    output = generator(prompt, max_new_tokens=128, temperature=0.7, do_sample=True, repetition_penalty=1.2, pad_token_id=tokenizer.eos_token_id ) # explicitly tell it when to stop
+    output = generator(prompt, max_new_tokens=128, temperature=0.7, do_sample=True, repetition_penalty=1.2) # explicitly tell it when to stop
     print(">>> After generation")  # Does this ever print?
-    end = time.time()
-    print(f"⏱️ Generation took {end - start:.2f} seconds") # DEBUG
+    #end = time.time()
+    #print(f"⏱️ Generation took {end - start:.2f} seconds") # DEBUG
     raw_output = output[0]['generated_text'].strip()
     print("Model raw output:\n", raw_output)  # <-- Debug print
     #return parse_flashcards(raw_output)
