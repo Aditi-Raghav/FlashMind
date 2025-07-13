@@ -1,11 +1,10 @@
 // ✅ STEP 1: Import Router-related tools
-import logo from './logo.svg';
 import './App.css';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { PencilIcon } from '@heroicons/react/24/outline'; // or /solid
 import { BookmarkIcon } from '@heroicons/react/24/outline'; // or /solid for filled version
-
+import Login from './components/Login';
+import Signup from './components/Signup';
 
 // ✅ STEP 2: Import your Navbar
 import Navbar from './components/Navbar';
@@ -80,12 +79,12 @@ function App() {
                   </div>
 
                   <div className="flex-1 max-w-md h-full p-4 bg-white dark:bg-gray-800 border border-cyan-200 rounded-xl ring shadow-xl ring-gray-900/5 transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer font-mono">
-                    <h3 class="text-gray-900 dark:text-white text-base font-medium tracking-tight "><code className="block mb-2 text-xl font-bold mt-5 dark:text-cyan-100">Saving Flashcards</code></h3>
-                    <p class="text-gray-500 dark:text-gray-400 mt-2 text-base ">
+                    <h3 className="text-gray-900 dark:text-white text-base font-medium tracking-tight "><code className="block mb-2 text-xl font-bold mt-5 dark:text-cyan-100">Saving Flashcards</code></h3>
+                    <p className="text-gray-500 dark:text-gray-400 mt-2 text-base ">
                       <code className="block mb-4"> Click below to save your generated flashcards ! </code>
                     </p>
                     <div>
-                      <span class="inline-flex items-center justify-center rounded-md bg-cyan-100 dark:bg-gray-900 border border-cyan-700 hover:bg-cyan-700 hover:text-white p-2 shadow-lg">
+                      <span className="inline-flex items-center justify-center rounded-md bg-cyan-100 dark:bg-gray-900 border border-cyan-700 hover:bg-cyan-700 hover:text-white p-2 shadow-lg">
                         <BookmarkIcon className="h-6 w-6 text-cyan-700 dark:text-white hover:text-white" />
                       </span>
                     </div>
@@ -110,11 +109,12 @@ function App() {
           {/* ✅ Placeholder routes (optional, for demo) */}
           <Route path="/users" element={<div className="p-4">Flashcards Page</div>} />
           <Route path="/dashboard" element={<div className="p-4">Test Stats Page</div>} />
-          <Route path="/login" element={<div className="p-4">Login Page</div>} />
+          <Route path="/login" element={<Login setUser={setUser} />} /> 
+          <Route path="/signup" element={<Signup setUser={setUser} />} />  
         </Routes>
       </Router>
     </div>
   );
 }
-
+  
 export default App;
