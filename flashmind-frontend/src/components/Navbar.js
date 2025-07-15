@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/solid';
+import toast from 'react-hot-toast';
 
 function Navbar({ user, onLogout, darkMode, setDarkMode }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    onLogout();
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (err) {
+      console.error('Logout failed:', err);
+    } finally {
+      localStorage.removeItem('authToken'); // clear tokens/sessions
+      onLogout(); // this is your App's setUser(null)
+      toast.success('You have been logged out.');
+      navigate('/login');
+    }
   };
 
   return (
@@ -55,7 +67,7 @@ function Navbar({ user, onLogout, darkMode, setDarkMode }) {
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `text-lg font-medium dark:text-cyan-200 ${
+                `text-lg font-medium dark:text-cyan-200 hover:underline ${
                   isActive ? 'underline text-cyan-900' : 'text-cyan-700'
                 }`
               }
@@ -64,9 +76,9 @@ function Navbar({ user, onLogout, darkMode, setDarkMode }) {
               Home
             </NavLink>
             <NavLink
-              to="/users"
+              to="/flashcards"
               className={({ isActive }) =>
-                `text-lg font-medium dark:text-cyan-200 ${
+                `text-lg font-medium dark:text-cyan-200 hover:underline ${
                   isActive ? 'underline text-cyan-900' : 'text-cyan-700'
                 }`
               }
@@ -77,7 +89,7 @@ function Navbar({ user, onLogout, darkMode, setDarkMode }) {
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
-                `text-lg font-medium dark:text-cyan-200 ${
+                `text-lg font-medium dark:text-cyan-200 hover:underline ${
                   isActive ? 'underline text-cyan-900' : 'text-cyan-700'
                 }`
               }
@@ -91,13 +103,24 @@ function Navbar({ user, onLogout, darkMode, setDarkMode }) {
           <div className="flex flex-col md:flex-row md:items-center md:space-x-6">
             {user ? (
               <>
-                <span className="flex items-center space-x-2 text-lg text-cyan-700 dark:text-cyan-200 font-semibold">
+                <span className="flex items-center space-x-1 text-lg text-cyan-700 dark:text-cyan-200 font-semibold">
                   <img
                     src="https://static.vecteezy.com/system/resources/thumbnails/019/879/186/small_2x/user-icon-on-transparent-background-free-png.png"
                     alt={`${user.name} avatar`}
                     className="w-7 h-7 rounded-full object-cover border border-cyan-200"
                   />
-                  <span className="lowercase">{user.name}</span>
+                  {/* <span className="text-lg">{user.name}</span> */}
+                  <NavLink to="/users"
+                    className={({ isActive }) =>
+                      `text-lg font-medium dark:text-cyan-200 hover:underline ${
+                      isActive ? 'underline text-cyan-900' : 'text-cyan-700'
+                      }`
+                    }
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Profile
+                  </NavLink>
+
                 </span>
 
                 <button
@@ -105,7 +128,7 @@ function Navbar({ user, onLogout, darkMode, setDarkMode }) {
                     handleLogout();
                     setMenuOpen(false);
                   }}
-                  className="text-lg text-red-500 hover:underline font-medium mt-2 md:mt-0"
+                  className="text-lg hover:underline mt-1 md:mt-0 w-1/2 px-2 py-1 border border-cyan-800 bg-cyan-700 text-white rounded-lg dark:hover:text-cyan-200 dark:bg-gray-700 dark:hover:bg-gray-800 dark:border-cyan-200 font-semibold"
                 >
                   Logout
                 </button>

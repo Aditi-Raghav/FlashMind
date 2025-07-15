@@ -33,6 +33,7 @@ module.exports = {
         custom: ['Quantico', 'sans-serif'],
         custom2: ['Michroma', 'sans-serif'],
         custom3: ['Roboto Mono', 'sans-serif'],
+        lexend: ['Lexend', 'sans-serif'],
       },
       colors: {
         "custom-blue": "#070a0f",
