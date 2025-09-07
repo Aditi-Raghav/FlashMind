@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+//import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 export default function UserPage({ user, setUser, darkMode }) {
@@ -14,7 +14,7 @@ export default function UserPage({ user, setUser, darkMode }) {
   
   const navigate = useNavigate();
   // const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(null);
+  //const [error, setError] = useState(null);
 
 
   // Skip fetch for now (comment it out)

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 
 function Navbar({ user, onLogout, darkMode, setDarkMode }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -23,12 +24,15 @@ function Navbar({ user, onLogout, darkMode, setDarkMode }) {
     }
   };
 
+  const isOverviewActive = location.pathname === '/' && location.hash === '#overview-section';
+
+
   return (
-    <nav className="sticky top-0 py-1 px-1 bg-cyan-100 dark:bg-gray-800 shadow-md z-50 overflow-x-hidden">
+    <nav className="sticky top-0 py-2 px-1 bg-cyan-100 dark:bg-gray-800 shadow-md z-50 overflow-x-hidden font-lexend">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between">
         {/* Left: Brand ...text-[#FFB6C1]*/}
         <div className="flex items-center justify-between w-full md:w-auto">
-        <div className="text-2xl font-bold text-cyan-700 dark:text-cyan-100 mr-4">
+        <div className="text-3xl font-bold text-cyan-700 dark:text-cyan-100 mr-4">
           FlashMind
         </div>
 
@@ -76,27 +80,27 @@ function Navbar({ user, onLogout, darkMode, setDarkMode }) {
               Home
             </NavLink>
             <NavLink
-              to="/flashcards"
-              className={({ isActive }) =>
-                `text-lg font-medium dark:text-cyan-200 hover:underline ${
-                  isActive ? 'underline text-cyan-900' : 'text-cyan-700'
-                }`
-              }
-              onClick={() => setMenuOpen(false)}
-            >
-              Flashcards
-            </NavLink>
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) =>
-                `text-lg font-medium dark:text-cyan-200 hover:underline ${
-                  isActive ? 'underline text-cyan-900' : 'text-cyan-700'
-                }`
-              }
-              onClick={() => setMenuOpen(false)}
-            >
-              Test Stats
-            </NavLink>
+                to="/flashcards"
+                className={({ isActive }) =>
+                  `text-lg font-medium dark:text-cyan-200 hover:underline ${
+                    isActive ? 'underline text-cyan-900' : 'text-cyan-700'
+                  }`
+                }
+                onClick={() => setMenuOpen(false)}
+              >
+                Flashcards
+              </NavLink>
+
+              <Link
+                  to="/#overview-section"
+                  onClick={() => setMenuOpen(false)}
+                  className={`text-lg font-medium dark:text-cyan-200 hover:underline ${
+                    isOverviewActive ? 'underline text-cyan-900' : 'text-cyan-700'
+                  }`}
+                >
+                  Overview
+                </Link>
+
           </div>
 
           {/* Right: Auth + Dark Mode */}
@@ -121,6 +125,15 @@ function Navbar({ user, onLogout, darkMode, setDarkMode }) {
                     Profile
                   </NavLink>
 
+                  {/*<Link
+                    to="/#reviews"
+                    onClick={() => setMenuOpen(false)}
+                    className="text-lg font-medium dark:text-cyan-200 hover:underline text-cyan-700"
+                  >
+                    Reviews
+                  </Link>*/}
+
+
                 </span>
 
                 <button
@@ -140,7 +153,8 @@ function Navbar({ user, onLogout, darkMode, setDarkMode }) {
                 className="text-lg text-cyan-700 dark:text-cyan-200 hover:underline font-medium mt-2 md:mt-0"
               >
                 Login
-              </Link>
+              </Link> 
+            
             )}
 
           </div>
